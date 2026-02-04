@@ -1,0 +1,54 @@
+GENERATE  30,10                ;Новый посетитель
+    TRANSFER 300,,SkipAtDay
+    QUEUE     QSELLER             ;Постановка в очередь
+    TRANSFER 500,SELLER1DAY,SELLER2DAY
+
+SELLER1DAY SEIZE     SELLER              ;Начать обслуживание или          ожидать в очереди, когда продавец освободится
+    DEPART    QSELLER             ;Выход из очереди
+    ADVANCE   5                ;Обслуживание покупателя
+    RELEASE   SELLER              ;Завершение обслуживания
+    TRANSFER ,GOTOKASSADAY
+
+SELLER2DAY SEIZE SELLER2
+    DEPART    QSELLER             ;Выход из очереди
+    ADVANCE 5
+    RELEASE SELLER2
+    TRANSFER ,GOTOKASSADAY
+
+GOTOKASSADAY QUEUE     QKASSA              ;Постановка в очередь
+    SEIZE     KASSA               ;Начать обслуживание или          ожидать в очереди, когда кассир освободится
+    DEPART    QKASSA              ;Выход из очереди
+    ADVANCE   5                ;Обслуживание покупателя
+    RELEASE   KASSA              ;Завершение обслуживания
+SkipAtDay TERMINATE
+
+GENERATE  7,2,360                ;Новый посетитель
+    TRANSFER 400,,SkipAtNight
+    QUEUE     QSELLER             ;Постановка в очередь
+
+    TRANSFER 500,SELLER1NIGHT,SELLER2NIGHT
+
+SELLER1NIGHT SEIZE     SELLER              ;Начать обслуживание или          ожидать в очереди, когда продавец освободится
+    DEPART    QSELLER             ;Выход из очереди
+    ADVANCE   5                ;Обслуживание покупателя
+    RELEASE   SELLER              ;Завершение обслуживания
+    TRANSFER ,GOTOKASSANIGHT
+
+SELLER2NIGHT SEIZE SELLER2
+    DEPART    QSELLER             ;Выход из очереди
+    ADVANCE 5
+    RELEASE SELLER2
+    TRANSFER ,GOTOKASSANIGHT
+
+    
+GOTOKASSANIGHT QUEUE     QKASSA              ;Постановка в очередь
+    SEIZE     KASSA               ;Начать обслуживание или          ожидать в очереди, когда кассир освободится
+    DEPART    QKASSA              ;Выход из очереди
+    ADVANCE   5                ;Обслуживание покупателя
+    RELEASE   KASSA              ;Завершение обслуживания
+SkipAtNight TERMINATE
+                                
+                                    
+GENERATE  480
+TERMINATE 1
+START 1      

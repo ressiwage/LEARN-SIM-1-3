@@ -1,0 +1,32 @@
+# 9
+```
+STSELLERS STORAGE 2         ;выделяем память под 2 канальное устройство (2 продавца)
+STKASSES STORAGE 2         ;выделяем память под 2 канальное устройство (2 кассира)
+
+GENERATE 25,10            ;обслуживание обычных клиентов (1 продавец)
+    QUEUE QSeller
+    SEIZE Seller
+    DEPART QSeller
+    ADVANCE 10,2
+    RELEASE Seller
+    TRANSFER ,GOTOKASSA
+    
+GENERATE 60,10,720        ;через 720 минут начинают приходить вип клиенты
+    QUEUE QSellers
+    ENTER STSELLERS,2       ;1ого випа обслуживают сразу два продавца
+    DEPART QSellers
+    ADVANCE 10,2
+    LEAVE STSELLERS,2       ;покидает обоих продавцов
+    
+GOTOKASSA QUEUE QKassa
+    ENTER STKASSES          ;всего кассира 2, люди заходят и их обслуживает свободный
+    DEPART QKassa
+    ADVANCE 5,2
+    LEAVE STKASSES
+    TERMINATE
+    
+GENERATE 1440
+    TERMINATE 1
+    
+START 1
+```
