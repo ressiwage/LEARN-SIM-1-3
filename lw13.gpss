@@ -1,0 +1,65 @@
+Гипермаркет обслуживает покупателей. Покупатели появляются в магазине каждые 105 минуты. Обслуживают покупателей несколько продавцов и несколько кассиров. 
+Покупатель выбирает в зале товар, на выбор товара от тратит 205 мин. При покупке колбасных изделий покупатель встаёт в очередь к одному из 2 продавцов. 
+На обслуживание тратится 52 минуты. То же самое происходит, если покупатель обслуживается в овощном отделе. После всего, покупатель поступает в очередь к одному из 5 кассиров.
+Найти загрузку кассиров  длину средней очереди к ним.
+Использовать при решении задачи следующий оператор:
+Transfer ,FN$SWITCHER
+
+
+MEATSELLERS STORAGE 2
+VEGSELLERS STORAGE 2
+
+SWITCHER_KASS FUNCTION RN4,D5                 
+0.2,KE1/0.4,KE2/0.6,KE3/0.8,KE4/1,KE5         
+
+SWITCHER FUNCTION RN4,D3
+0.5,LBM/1,LBV/
+
+GENERATE 10,5
+      ADVANCE 20,5
+      
+      Transfer ,FN$SWITCHER                ;обращаемся к функции, чтобы выбрать на какую метку прыгнуть 
+LBM   QUEUE QSELLER
+      ENTER MEATSELLERS
+      DEPART QSELLER
+      ADVANCE 5,2
+      LEAVE MEATSELLERS
+      TRANSFER ,KE
+
+LBV   QUEUE QSELLER2
+      ENTER VEGSELLERS
+      DEPART QSELLER2
+      ADVANCE 5,2
+      LEAVE VEGSELLERS
+      
+KE QUEUE QKASSA
+      Transfer ,FN$SWITCHER_KASS
+KE1   SEIZE KASSA 
+      DEPART QKASSA
+      ADVANCE 7,2
+      RELEASE KASSA
+      TRANSFER ,res
+KE2 SEIZE KASSA2
+      DEPART QKASSA
+      ADVANCE 7,2
+      RELEASE KASSA2
+      TRANSFER ,res
+KE3   SEIZE KASSA3
+      DEPART QKASSA
+      ADVANCE 7,2
+      RELEASE KASSA3
+      TRANSFER ,res
+KE4   SEIZE KASSA4
+      DEPART QKASSA
+      ADVANCE 7,2
+      RELEASE KASSA4
+      TRANSFER ,res
+KE5   SEIZE KASSA5
+      DEPART QKASSA
+      ADVANCE 7,2
+      RELEASE KASSA5
+      TRANSFER ,res
+res   TERMINATE
+
+GENERATE 480
+      TERMINATE 1
