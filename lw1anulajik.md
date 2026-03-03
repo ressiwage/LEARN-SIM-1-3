@@ -8,3 +8,11 @@
 
 
  https://disk.yandex.ru/d/0eb83CdJzwtBPA
+
+ ![alt text](image-1.png)
+
+ ![alt text](image-2.png)
+
+ двух банкиров достаточно чтобы симуляция не вылетала
+
+ https://disk.yandex.ru/d/qW-6HFKQxmoz3A
